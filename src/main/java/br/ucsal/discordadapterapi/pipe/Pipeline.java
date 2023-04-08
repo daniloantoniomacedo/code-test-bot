@@ -1,9 +1,9 @@
-package br.ucsal.discordadapterapi.service.pipe;
+package br.ucsal.discordadapterapi.pipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ucsal.discordadapterapi.service.filter.Filter;
+import br.ucsal.discordadapterapi.filter.Filter;
 
 public class Pipeline<T> {
 	

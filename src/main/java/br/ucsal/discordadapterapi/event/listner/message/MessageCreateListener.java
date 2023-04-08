@@ -1,14 +1,15 @@
-package br.ucsal.discordadapterapi.service.message;
+package br.ucsal.discordadapterapi.event.listner.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import br.ucsal.discordadapterapi.event.EventListener;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import reactor.core.publisher.Mono;
 
-@Service
-public class MessageCreateService implements EventListener<MessageCreateEvent> {
+@Component
+public class MessageCreateListener implements EventListener<MessageCreateEvent> {
 	
 	@Autowired
 	private MessageProcessor messageProcessor;

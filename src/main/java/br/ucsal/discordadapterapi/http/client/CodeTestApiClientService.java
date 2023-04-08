@@ -1,4 +1,4 @@
-package br.ucsal.discordadapterapi.service.http.client;
+package br.ucsal.discordadapterapi.http.client;
 
 import java.io.IOException;
 import java.net.URI;

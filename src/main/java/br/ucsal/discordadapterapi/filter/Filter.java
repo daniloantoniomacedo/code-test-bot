@@ -1,4 +1,4 @@
-package br.ucsal.discordadapterapi.service.filter;
+package br.ucsal.discordadapterapi.filter;
 
 public interface Filter<T> {
 	

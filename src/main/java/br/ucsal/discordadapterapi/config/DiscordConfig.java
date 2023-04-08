@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.ucsal.discordadapterapi.service.message.EventListener;
+import br.ucsal.discordadapterapi.event.EventListener;
+import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.Event;
+import discord4j.gateway.intent.IntentSet;
 
 @Configuration
-public class IntegracaoDiscordConfig {
+public class DiscordConfig {
 	
 	@Value("${token}")
 	private String token;
@@ -20,10 +22,11 @@ public class IntegracaoDiscordConfig {
 	@Bean
 	public <T extends Event> GatewayDiscordClient getGatewayDiscordClient(final List<EventListener<T>> eventListeners) {
 		
-		final GatewayDiscordClient client = DiscordClientBuilder.create(token)
-																.build()
-																.login()
-																.block();
+		final GatewayDiscordClient client = DiscordClient.create(token)
+		        .gateway()
+		        .setEnabledIntents(IntentSet.all())
+		        .login()
+		        .block();
 		
 		for(final EventListener<T> listener : eventListeners) {
 			client.on(listener.getEventType())

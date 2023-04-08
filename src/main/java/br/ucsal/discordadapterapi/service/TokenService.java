@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.ucsal.discordadapterapi.exception.BusinessException;
-import br.ucsal.discordadapterapi.service.http.client.CodeTestApiClientService;
+import br.ucsal.discordadapterapi.http.client.CodeTestApiClientService;
 import br.ucsal.discordadapterapi.to.response.LoginResponse;
 import br.ucsal.discordadapterapi.util.Constantes;
 

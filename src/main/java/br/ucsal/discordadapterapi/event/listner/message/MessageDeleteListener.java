@@ -1,12 +1,13 @@
-package br.ucsal.discordadapterapi.service.message;
+package br.ucsal.discordadapterapi.event.listner.message;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import br.ucsal.discordadapterapi.event.EventListener;
 import discord4j.core.event.domain.message.MessageDeleteEvent;
 import reactor.core.publisher.Mono;
 
-@Service
-public class MessageDeleteService implements EventListener<MessageDeleteEvent>{
+@Component
+public class MessageDeleteListener implements EventListener<MessageDeleteEvent>{
 
 	@Override
 	public Class<MessageDeleteEvent> getEventType() {

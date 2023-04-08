@@ -1,13 +1,14 @@
-package br.ucsal.discordadapterapi.service.message;
+package br.ucsal.discordadapterapi.event.listner.message;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import br.ucsal.discordadapterapi.event.EventListener;
 import discord4j.core.event.domain.message.MessageUpdateEvent;
 import discord4j.core.object.entity.Message;
 import reactor.core.publisher.Mono;
 
-@Service
-public class MessageUpdateService implements EventListener<MessageUpdateEvent> {
+@Component
+public class MessageUpdateListener implements EventListener<MessageUpdateEvent> {
 
 	@Override
 	public Class<MessageUpdateEvent> getEventType() {
