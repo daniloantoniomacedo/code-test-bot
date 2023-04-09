@@ -2,16 +2,16 @@ package br.ucsal.discordadapterapi.filter;
 
 import org.springframework.stereotype.Component;
 
-import br.ucsal.discordadapterapi.to.DadosTO;
+import br.ucsal.discordadapterapi.to.MessageTO;
 import discord4j.core.object.entity.Message;
 
 @Component
-public class SaudacaoFilter implements Filter<DadosTO> {
+public class SaudacaoFilter implements Filter<MessageTO> {
 	
 	private String autor = "Desconhecido";
 
 	@Override
-	public DadosTO process(DadosTO to) {
+	public MessageTO process(MessageTO to) {
 		Message msg = to.getMessage();
 		String conteudo = msg.getData().content();
 		if (conteudo.startsWith("oi")) {

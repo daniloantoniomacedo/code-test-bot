@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.ucsal.discordadapterapi.event.EventListener;
+import br.ucsal.discordadapterapi.event.processor.MessageProcessor;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import reactor.core.publisher.Mono;
