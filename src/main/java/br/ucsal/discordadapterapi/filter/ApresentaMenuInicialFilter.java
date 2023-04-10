@@ -17,10 +17,9 @@ public class ApresentaMenuInicialFilter implements Filter<MessageTO> {
 		if(conteudo.startsWith("menu")) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("--------- ").append(Constantes.MENU_INICIAL).append(" ---------\n");
-			sb.append("[1] - Tarefas \n");
-			sb.append("[2] - Minhas submissões \n");
-			sb.append("Escolha um emoji para selecionar uma opção.\n");
-			sb.append("Exemplo: reaja com o emoji ").append(EmojiEnum.OPCAO_1.obterCodigo()).append(" \n");
+			sb.append(EmojiEnum.OPCAO_1.obterCodigo()).append(" - Tarefas \n");
+			sb.append(EmojiEnum.OPCAO_2.obterCodigo()).append(" - Minhas submissões \n");
+			sb.append("Reaja com o emoji correspondente para selecionar uma opção.\n");
 			sb.append("------------------------------------\n");
 			to.setRetorno(sb.toString());
 		}

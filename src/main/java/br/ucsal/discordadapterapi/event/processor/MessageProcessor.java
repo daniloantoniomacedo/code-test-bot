@@ -29,6 +29,7 @@ public class MessageProcessor extends Processor<MessageTO> {
 			return pipeline.process(to).getRetorno();
 
 		} catch (BusinessException e) {
+			System.out.println(e.getMessage());
 			return Constantes.EMPTY_STRING;
 		}
 

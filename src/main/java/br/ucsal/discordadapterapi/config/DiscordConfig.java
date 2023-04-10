@@ -21,14 +21,12 @@ public class DiscordConfig {
 	@Bean
 	public <T extends Event> GatewayDiscordClient getGatewayDiscordClient(final List<EventListener<T>> eventListeners) {
 
-		final GatewayDiscordClient client = DiscordClient.create(token)
-														 .gateway().setEnabledIntents(IntentSet.all())
-														 .login().block();
+		final GatewayDiscordClient client = DiscordClient.create(token).gateway().setEnabledIntents(IntentSet.all())
+				.login().block();
 
 		for (final EventListener<T> listener : eventListeners) {
-			client.on(listener.getEventType()).flatMap(listener::execute)
-				  .onErrorResume(listener::handleError)
-				  .subscribe();
+			client.on(listener.getEventType()).flatMap(listener::execute).onErrorResume(listener::handleError)
+					.subscribe();
 		}
 
 		return client;
