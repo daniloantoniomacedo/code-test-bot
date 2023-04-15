@@ -41,7 +41,7 @@ public class ProcessaOpcaoMenuInicialFilter implements Filter<ReactionTO> {
 	}
 
 	private static boolean ehMenuInicial(ReactionTO to) {
-		return to.getMessage().getContent().contains(Constantes.MENU_INICIAL);
+		return to.getMsg().getContent().contains(Constantes.MENU_INICIAL);
 	}
 
 }

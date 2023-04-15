@@ -12,7 +12,7 @@ public class SaudacaoFilter implements Filter<MessageTO> {
 
 	@Override
 	public MessageTO process(MessageTO to) {
-		Message msg = to.getMessage();
+		Message msg = to.getMsg();
 		String conteudo = msg.getData().content();
 		if (conteudo.startsWith("oi")) {
 			msg.getAuthor().ifPresent(user -> autor = user.getUsername());

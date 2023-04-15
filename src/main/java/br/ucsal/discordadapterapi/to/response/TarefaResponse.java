@@ -1,4 +1,4 @@
-package br.ucsal.discordadapterapi.model;
+package br.ucsal.discordadapterapi.to.response;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Tarefa {
+public class TarefaResponse {
 	
 	private Long id;
 	private String titulo;
 	private String descricao;
-	private List<Teste> testes;
+	private List<TesteResponse> testes;
 	
 }

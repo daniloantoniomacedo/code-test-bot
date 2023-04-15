@@ -9,15 +9,20 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.ucsal.discordadapterapi.exception.BusinessException;
-import br.ucsal.discordadapterapi.model.Tarefa;
+import br.ucsal.discordadapterapi.to.request.CadastroUsuarioRequest;
 import br.ucsal.discordadapterapi.to.request.LoginRequest;
+import br.ucsal.discordadapterapi.to.request.RespostaRequest;
 import br.ucsal.discordadapterapi.to.response.LoginResponse;
+import br.ucsal.discordadapterapi.to.response.ResultadoTarefaResponse;
+import br.ucsal.discordadapterapi.to.response.TarefaResponse;
+import br.ucsal.discordadapterapi.to.response.UsuarioResponse;
 import br.ucsal.discordadapterapi.util.Constantes;
 import br.ucsal.discordadapterapi.util.JsonUtil;
 
@@ -56,16 +61,59 @@ public class CodeTestApiClientService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Tarefa> obterTarefas(String token) throws BusinessException {
+	public Optional<List<UsuarioResponse>> obterListaUsuarios(String token) {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/usuarios"))).GET()
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == HttpStatus.OK.value()) {
+				return Optional.of(JsonUtil.fromJson(response.body(), List.class, UsuarioResponse.class));
+			} else {
+				System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS + "HTTP STATUS CODE " + response.statusCode());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS.concat(e.getMessage()));
+		}
+		return Optional.empty();
+	}
+	
+	public Optional<UsuarioResponse> cadastrarUsuario(CadastroUsuarioRequest cadastroRequest, String token) {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/usuarios/")))
+					.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.toJson(cadastroRequest)))
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == HttpStatus.OK.value()) {
+				return Optional.of(JsonUtil.fromJson(response.body(), UsuarioResponse.class));
+			} else {
+				System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO + "HTTP STATUS CODE " + response.statusCode());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO.concat(e.getMessage()));
+		}
+		return Optional.empty();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TarefaResponse> obterTarefas(String token) throws BusinessException {
 
 		try {
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/tarefa/"))).GET()
-					.header("Content-Type", "application/json").header("Authorization", "Bearer " + token).build();
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			
+
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
-				return JsonUtil.fromJson(response.body(), List.class, Tarefa.class);
+				return JsonUtil.fromJson(response.body(), List.class, TarefaResponse.class);
 			} else {
 				throw new BusinessException(Constantes.MSG_ERRO_OBTER_TAREFAS);
 			}
@@ -75,17 +123,18 @@ public class CodeTestApiClientService {
 		}
 
 	}
-	
-	public Tarefa obterTarefaPeloId(Long id, String token) throws BusinessException {
+
+	public TarefaResponse obterTarefaPeloId(Long id, String token) throws BusinessException {
 
 		try {
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/tarefa/" + id))).GET()
-					.header("Content-Type", "application/json").header("Authorization", "Bearer " + token).build();
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			
+
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
-				return JsonUtil.fromJson(response.body(), Tarefa.class);
+				return JsonUtil.fromJson(response.body(), TarefaResponse.class);
 			} else {
 				throw new BusinessException(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id));
 			}
@@ -94,6 +143,47 @@ public class CodeTestApiClientService {
 			throw new BusinessException(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id).concat(e.getMessage()), e);
 		}
 
+	}
+
+	public Optional<ResultadoTarefaResponse> enviarResposta(RespostaRequest respostaRequest, String token) {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/respostas/")))
+					.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.toJson(respostaRequest)))
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == HttpStatus.OK.value()) {
+				return Optional.of(JsonUtil.fromJson(response.body(), ResultadoTarefaResponse.class));
+			} else {
+				System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA + "HTTP STATUS CODE " + response.statusCode());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA.concat(e.getMessage()));
+		}
+		return Optional.empty();
+	}
+	
+	public Optional<ResultadoTarefaResponse> obterResultadoPorId(Long id, String token) {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/resultados/" + id))).GET()
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == HttpStatus.OK.value()) {
+				return Optional.of(JsonUtil.fromJson(response.body(), ResultadoTarefaResponse.class));
+			} else {
+				System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA + "HTTP STATUS CODE " + response.statusCode());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA.concat(e.getMessage()));
+		}
+		return Optional.empty();
 	}
 
 }

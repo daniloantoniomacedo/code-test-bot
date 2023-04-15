@@ -30,7 +30,7 @@ public class ProcessaOpcaoMenuTarefaFilter implements Filter<ReactionTO> {
 	}
 	
 	private static boolean ehMenuTarefa(ReactionTO to) {
-		return to.getMessage().getContent().contains(Constantes.MENU_TAREFAS);
+		return to.getMsg().getContent().contains(Constantes.MENU_TAREFAS);
 	}
 	
 }

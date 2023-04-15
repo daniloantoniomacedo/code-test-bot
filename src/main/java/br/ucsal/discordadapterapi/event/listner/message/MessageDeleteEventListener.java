@@ -7,7 +7,7 @@ import discord4j.core.event.domain.message.MessageDeleteEvent;
 import reactor.core.publisher.Mono;
 
 @Component
-public class MessageDeleteListener implements EventListener<MessageDeleteEvent>{
+public class MessageDeleteEventListener implements EventListener<MessageDeleteEvent>{
 
 	@Override
 	public Class<MessageDeleteEvent> getEventType() {

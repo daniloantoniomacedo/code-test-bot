@@ -8,7 +8,7 @@ import discord4j.core.object.entity.Message;
 import reactor.core.publisher.Mono;
 
 @Component
-public class MessageUpdateListener implements EventListener<MessageUpdateEvent> {
+public class MessageUpdateEventListener implements EventListener<MessageUpdateEvent> {
 
 	@Override
 	public Class<MessageUpdateEvent> getEventType() {

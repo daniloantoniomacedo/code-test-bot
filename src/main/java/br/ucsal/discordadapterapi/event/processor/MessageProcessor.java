@@ -19,17 +19,16 @@ public class MessageProcessor extends Processor<MessageTO> {
 		super(filters);
 	}
 
-	public String obterResposta(Message msg) {
+	public String obterResposta(Message msg, Message msgAnterior) {
 		try {
 
 			verificarMsgNulaOuVazia(msg);
 			verificarMsgBot(msg);
 
-			MessageTO to = new MessageTO(msg);
+			MessageTO to = new MessageTO(msg, msgAnterior);
 			return pipeline.process(to).getRetorno();
 
 		} catch (BusinessException e) {
-			System.out.println(e.getMessage());
 			return Constantes.EMPTY_STRING;
 		}
 

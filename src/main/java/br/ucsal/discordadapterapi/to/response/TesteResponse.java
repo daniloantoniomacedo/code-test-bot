@@ -1,4 +1,4 @@
-package br.ucsal.discordadapterapi.model;
+package br.ucsal.discordadapterapi.to.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Teste {
+public class TesteResponse {
 	
 	private Long id;
 	private String nomeTeste;
