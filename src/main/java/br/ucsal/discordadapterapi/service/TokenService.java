@@ -1,5 +1,7 @@
 package br.ucsal.discordadapterapi.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 import br.ucsal.discordadapterapi.exception.BusinessException;
 import br.ucsal.discordadapterapi.http.client.CodeTestApiClientService;
 import br.ucsal.discordadapterapi.to.response.LoginResponse;
-import br.ucsal.discordadapterapi.util.Constantes;
 
 @Service
 public class TokenService {
@@ -20,21 +21,28 @@ public class TokenService {
 	@Autowired
 	private CodeTestApiClientService codeTestApiClient;
 
-	@Autowired
-	private RedisService<String, String> redisService;
+	private LocalDateTime dataHoraGeracaoToken;
+	
+	private String token;
 
 	public String obterToken() throws BusinessException {
-		String token = redisService.getValue(Constantes.TOKEN);
-		
-		if (Objects.isNull(token)) {
+		if (isTokenExpirado()) {
 			LoginResponse loginResponse = codeTestApiClient.login();
-			redisService.setValueIfAbset(Constantes.TOKEN, loginResponse.getToken(), expirationTokenInMiliSec);
+			token = loginResponse.getToken();
+			dataHoraGeracaoToken = LocalDateTime.now();
 			System.out.println("TOKEN " + loginResponse.getToken());
-			return loginResponse.getToken();
-		} else {
-			return token;
 		}
-
+		return token;
+	}
+	
+	private boolean isTokenExpirado() {
+		if(Objects.isNull(token) || Objects.isNull(dataHoraGeracaoToken)) {
+			return true;
+		}
+		if(Duration.between(dataHoraGeracaoToken, LocalDateTime.now()).toMillis() <= expirationTokenInMiliSec) {
+			return false;
+		}
+		return true;
 	}
 
 }

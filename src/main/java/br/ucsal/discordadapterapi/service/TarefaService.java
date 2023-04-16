@@ -96,13 +96,14 @@ public class TarefaService {
 			sb.append("> ").append("Exemplos: ").append(Constantes.ESCAPE);
 			for(TesteResponse teste : tarefa.getTestes()) {
 				if(teste.isFlagExibir()) {
-					sb.append("> ").append(Constantes.ESCAPE);
 					sb.append("> ").append("*Entrada:* ").append(teste.getEntrada()).append(Constantes.ESCAPE);
 					sb.append("> ").append("*Saída:* ").append(teste.getSaida()).append(Constantes.ESCAPE);
+					sb.append("> ").append(Constantes.ESCAPE);
 				}
 			}
 		}
-		sb.append(String.format("Resolva a " + Constantes.TAREFA + " %d na sua IDE favorita, copie a classe *main* e cole no chat.", emojiEnum.getNumero())).append(Constantes.ESCAPE);
+		sb.append(String.format("Resolva a " + Constantes.TAREFA + " %d na sua IDE favorita, copie a classe *Main* e cole no chat.", emojiEnum.getNumero())).append(Constantes.ESCAPE);
+		sb.append("__Obs.: o nome da classe deve ser *Main*__");
 		return sb.toString();
 	}
 	

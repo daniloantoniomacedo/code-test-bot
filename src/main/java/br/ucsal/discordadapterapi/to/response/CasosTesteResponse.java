@@ -11,6 +11,7 @@ public class CasosTesteResponse {
 	
 	private Long id;
     private boolean resultadoFinal;
+    private String nome;
     private String entrada;
     private String saidaEsperada;
     private String saidaObtida;
