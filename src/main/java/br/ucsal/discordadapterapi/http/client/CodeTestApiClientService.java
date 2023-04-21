@@ -51,13 +51,16 @@ public class CodeTestApiClientService {
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
 				return JsonUtil.fromJson(response.body(), LoginResponse.class);
 			} else {
-				throw new BusinessException(Constantes.MSG_ERRO_LOGIN);
+				System.err.println(Constantes.MSG_ERRO_LOGIN + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			throw new BusinessException(Constantes.MSG_ERRO_LOGIN.concat(e.getMessage()), e);
+			System.err.println(Constantes.MSG_ERRO_LOGIN + e.getMessage());
+			e.printStackTrace();
 		}
-
+		
+		throw new BusinessException(Constantes.MSG_ERRO_LOGIN);
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -72,11 +75,12 @@ public class CodeTestApiClientService {
 			if (response.statusCode() == HttpStatus.OK.value()) {
 				return Optional.of(JsonUtil.fromJson(response.body(), List.class, UsuarioResponse.class));
 			} else {
-				System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS + "HTTP STATUS CODE " + response.statusCode());
+				System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS.concat(e.getMessage()));
+			System.err.println(Constantes.MSG_ERRO_OBTER_USUARIOS + e.getMessage());
+			e.printStackTrace();
 		}
 		return Optional.empty();
 	}
@@ -93,11 +97,12 @@ public class CodeTestApiClientService {
 			if (response.statusCode() == HttpStatus.OK.value()) {
 				return Optional.of(JsonUtil.fromJson(response.body(), UsuarioResponse.class));
 			} else {
-				System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO + "HTTP STATUS CODE " + response.statusCode());
+				System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO.concat(e.getMessage()));
+			System.err.println(Constantes.MSG_ERRO_CADASTRAR_USUARIO + e.getMessage());
+			e.printStackTrace();
 		}
 		return Optional.empty();
 	}
@@ -115,12 +120,15 @@ public class CodeTestApiClientService {
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
 				return JsonUtil.fromJson(response.body(), List.class, TarefaResponse.class);
 			} else {
-				throw new BusinessException(Constantes.MSG_ERRO_OBTER_TAREFAS);
+				System.err.println(Constantes.MSG_ERRO_OBTER_TAREFAS + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			throw new BusinessException(Constantes.MSG_ERRO_OBTER_TAREFAS.concat(e.getMessage()), e);
+			System.err.println(Constantes.MSG_ERRO_OBTER_TAREFAS + e.getMessage());
+			e.printStackTrace();
 		}
+		
+		throw new BusinessException(Constantes.MSG_ERRO_OBTER_TAREFAS);
 
 	}
 
@@ -136,12 +144,15 @@ public class CodeTestApiClientService {
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
 				return JsonUtil.fromJson(response.body(), TarefaResponse.class);
 			} else {
-				throw new BusinessException(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id));
+				System.err.println(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id) + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			throw new BusinessException(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id).concat(e.getMessage()), e);
+			System.err.println(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id) + e.getMessage());
+			e.printStackTrace();
 		}
+		
+		throw new BusinessException(String.format(Constantes.MSG_ERRO_OBTER_TAREFA, id));
 
 	}
 
@@ -157,11 +168,12 @@ public class CodeTestApiClientService {
 			if (response.statusCode() == HttpStatus.OK.value()) {
 				return Optional.of(JsonUtil.fromJson(response.body(), ResultadoTarefaResponse.class));
 			} else {
-				System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA + "HTTP STATUS CODE " + response.statusCode());
+				System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA.concat(e.getMessage()));
+			System.err.println(Constantes.MSG_ERRO_ENVIAR_RESPOSTA + e.getMessage());
+			e.printStackTrace();
 		}
 		return Optional.empty();
 	}
@@ -177,11 +189,12 @@ public class CodeTestApiClientService {
 			if (response.statusCode() == HttpStatus.OK.value()) {
 				return Optional.of(JsonUtil.fromJson(response.body(), ResultadoTarefaResponse.class));
 			} else {
-				System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA + "HTTP STATUS CODE " + response.statusCode());
+				System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
 
 		} catch (IOException | InterruptedException e) {
-			System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA.concat(e.getMessage()));
+			System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA + e.getMessage());
+			e.printStackTrace();
 		}
 		return Optional.empty();
 	}

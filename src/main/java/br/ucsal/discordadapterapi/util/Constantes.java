@@ -22,6 +22,7 @@ public class Constantes {
 	public static final String ESCAPE = "\n";
 	public static final String TAREFA = "tarefa";
 	public static final String EMAIL_PADRAO = "email";
+	public static final String HTTP_STATUS_CODE = " HTTP STATUS CODE ";
 	
 	public static final Long PERFIL_ALUNO = 2L;
 

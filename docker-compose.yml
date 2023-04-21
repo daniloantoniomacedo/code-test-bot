@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres:latest
+        env_file:
+          - .env
+        volumes:
+          - C:\Users\Danilo.DESKTOP-HBLJ4GK\Documents\Postgres:/var/lib/postgresql/data
+        ports:
+          - "15432:5432"
+        networks:
+          - rede-code-test
+    
+    discord-adapter-api:
+        image: dbmacedo/code-test-discord:discord-adapter-api
+        env_file:
+          - .env
+        ports:
+          - "8080:8080"
+        networks:
+          - rede-code-test
+    
+    code-test-api:
+        image: dbmacedo/code-test-discord:code-test-api
+        env_file:
+          - .env
+        ports:
+          - "8081:8081"
+        networks:
+          - rede-code-test      
+
+networks:
+  rede-code-test:
+    driver: bridge
