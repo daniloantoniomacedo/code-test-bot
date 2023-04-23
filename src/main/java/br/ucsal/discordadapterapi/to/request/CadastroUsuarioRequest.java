@@ -12,7 +12,7 @@ public class CadastroUsuarioRequest {
 
 	private String nome;
 	private String login;
-	private String senha = Constantes.EMPTY_STRING;
+	private String senha = Constantes.SENHA_PADRAO;
 	private String email = Constantes.EMAIL_PADRAO;
 	private boolean flagAtivo = true;
 	private Long perfilId = Constantes.PERFIL_ALUNO;

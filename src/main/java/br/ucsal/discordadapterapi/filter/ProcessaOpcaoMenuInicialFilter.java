@@ -1,6 +1,7 @@
 package br.ucsal.discordadapterapi.filter;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import br.ucsal.discordadapterapi.service.SubmissaoService;
 import br.ucsal.discordadapterapi.service.TarefaService;
 import br.ucsal.discordadapterapi.to.ReactionTO;
 import br.ucsal.discordadapterapi.util.Constantes;
+import discord4j.core.object.entity.User;
 import discord4j.discordjson.json.EmojiData;
 
 @Component
@@ -32,7 +34,10 @@ public class ProcessaOpcaoMenuInicialFilter implements Filter<ReactionTO> {
 			if(EmojiEnum.OPCAO_1.equals(emojiEnum)) {
 				to.setRetorno(tarefaService.obterMenuTarefas());
 			} else if(EmojiEnum.OPCAO_2.equals(emojiEnum)) {
-				to.setRetorno(submissaoService.obterSubmissoes());
+				Optional<User> op = to.getMsg().getAuthor();
+				if(op.isPresent()) {
+					to.setRetorno(submissaoService.obterSubmissoes(op.get()));
+				}
 			}
 
 		}

@@ -12,7 +12,6 @@ import br.ucsal.discordadapterapi.to.MessageTO;
 import br.ucsal.discordadapterapi.to.response.UsuarioResponse;
 import br.ucsal.discordadapterapi.util.Constantes;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.User;
 
 @Component
 public class ProcessaRespostaTarefaFilter implements Filter<MessageTO> {
@@ -28,7 +27,7 @@ public class ProcessaRespostaTarefaFilter implements Filter<MessageTO> {
 		if (ehRespostaTarefa(to)) {
 			Message msgAtual = to.getMsg();
 			if(msgAtual.getAuthor().isPresent()) {
-				Optional<UsuarioResponse> retornoObterUsuario = usuarioService.obterUsuario(to.getMsgAnterior().getAuthor().get());
+				Optional<UsuarioResponse> retornoObterUsuario = usuarioService.obterDadosUsuario(msgAtual.getAuthor().get());
 				to.setRetorno(obterRetorno(to, retornoObterUsuario));
 			}
 		}
@@ -37,12 +36,11 @@ public class ProcessaRespostaTarefaFilter implements Filter<MessageTO> {
 
 	private String obterRetorno(MessageTO to, Optional<UsuarioResponse> retornoObterUsuario) {
 		Message msgAtual = to.getMsg();
-		User user = to.getMsgAnterior().getAuthor().get();
 		String retorno = Constantes.EMPTY_STRING;
 		if(retornoObterUsuario.isPresent()) {
 			retorno = respostaService.corrigirResposta(msgAtual.getContent(), obterNumeroTarefa(to.getMsgAnterior()), retornoObterUsuario.get().getId());
 		} else {
-			Optional<Long> retornoCadastro = usuarioService.cadastrarUsuario(user);
+			Optional<Long> retornoCadastro = usuarioService.cadastrarUsuario(msgAtual.getAuthor().get());
 			if(retornoCadastro.isPresent()) {
 				retorno = respostaService.corrigirResposta(msgAtual.getContent(), obterNumeroTarefa(to.getMsgAnterior()), retornoCadastro.get());
 			}

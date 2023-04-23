@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import br.ucsal.discordadapterapi.to.request.LoginRequest;
 import br.ucsal.discordadapterapi.to.request.RespostaRequest;
 import br.ucsal.discordadapterapi.to.response.LoginResponse;
 import br.ucsal.discordadapterapi.to.response.ResultadoTarefaResponse;
+import br.ucsal.discordadapterapi.to.response.SubmissaoResponse;
 import br.ucsal.discordadapterapi.to.response.TarefaResponse;
 import br.ucsal.discordadapterapi.to.response.UsuarioResponse;
 import br.ucsal.discordadapterapi.util.Constantes;
@@ -194,6 +196,30 @@ public class CodeTestApiClientService {
 
 		} catch (IOException | InterruptedException e) {
 			System.err.println(Constantes.MSG_ERRO_OBTER_RESPOSTA + e.getMessage());
+			e.printStackTrace();
+		}
+		return Optional.empty();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<List<SubmissaoResponse>> obterSubmissoes(Long id, String token) {
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(baseUrl.concat("api/respostas/usuario/" + id))).GET()
+					.header("Content-Type", "application/json")
+					.header("Authorization", "Bearer " + token).build();
+			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+
+			if (response.statusCode() == HttpStatus.OK.value()) {
+				return Optional.of(JsonUtil.fromJson(response.body(), List.class, SubmissaoResponse.class));
+			} else if(response.statusCode() == HttpStatus.NOT_FOUND.value()) {
+				return Optional.of(Collections.EMPTY_LIST);
+			} else {
+				System.err.println(Constantes.MSG_ERRO_OBTER_SUBMISSOES + Constantes.HTTP_STATUS_CODE + response.statusCode());
+			}
+
+		} catch (IOException | InterruptedException e) {
+			System.err.println(Constantes.MSG_ERRO_OBTER_SUBMISSOES + e.getMessage());
 			e.printStackTrace();
 		}
 		return Optional.empty();

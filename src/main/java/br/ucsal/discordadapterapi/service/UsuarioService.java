@@ -23,7 +23,7 @@ public class UsuarioService {
 	@Autowired
 	private CodeTestApiClientService codeTestApiClient;
 
-	public Optional<UsuarioResponse> obterUsuario(User user) {
+	public Optional<UsuarioResponse> obterDadosUsuario(User user) {
 
 		if (Objects.isNull(user)) return Optional.empty();
 		
