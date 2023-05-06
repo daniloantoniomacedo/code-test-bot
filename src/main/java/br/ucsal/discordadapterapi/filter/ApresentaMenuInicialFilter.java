@@ -19,6 +19,7 @@ public class ApresentaMenuInicialFilter implements Filter<MessageTO> {
 			sb.append("--------- ").append(Constantes.MENU_INICIAL).append(" ---------\n");
 			sb.append(EmojiEnum.OPCAO_1.obterCodigo()).append(" - Responder tarefas \n");
 			sb.append(EmojiEnum.OPCAO_2.obterCodigo()).append(" - Minhas submissões \n");
+			sb.append(EmojiEnum.OPCAO_3.obterCodigo()).append(" - Instruções \n");
 			sb.append("Reaja com o emoji correspondente para selecionar uma opção.\n");
 			sb.append("------------------------------------\n");
 			to.setRetorno(sb.toString());

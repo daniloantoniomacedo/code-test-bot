@@ -38,6 +38,8 @@ public class ProcessaOpcaoMenuInicialFilter implements Filter<ReactionTO> {
 				if(op.isPresent()) {
 					to.setRetorno(submissaoService.obterSubmissoes(op.get()));
 				}
+			} else if(EmojiEnum.OPCAO_3.equals(emojiEnum)) {
+				to.setRetorno(apresentarInstrucoes());
 			}
 
 		}
@@ -47,6 +49,12 @@ public class ProcessaOpcaoMenuInicialFilter implements Filter<ReactionTO> {
 
 	private static boolean ehMenuInicial(ReactionTO to) {
 		return to.getMsg().getContent().contains(Constantes.MENU_INICIAL);
+	}
+	
+	private static String apresentarInstrucoes() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Para interagir com o BOT digite **menu** e siga as instruções.");
+		return sb.toString();
 	}
 
 }

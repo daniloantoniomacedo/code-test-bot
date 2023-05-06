@@ -30,7 +30,6 @@ public class TokenService {
 			LoginResponse loginResponse = codeTestApiClient.login();
 			token = loginResponse.getToken();
 			dataHoraGeracaoToken = LocalDateTime.now();
-			System.out.println("TOKEN " + loginResponse.getToken());
 		}
 		return token;
 	}

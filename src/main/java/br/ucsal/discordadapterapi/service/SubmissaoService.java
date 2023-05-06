@@ -1,5 +1,6 @@
 package br.ucsal.discordadapterapi.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import br.ucsal.discordadapterapi.http.client.CodeTestApiClientService;
 import br.ucsal.discordadapterapi.to.response.SubmissaoResponse;
 import br.ucsal.discordadapterapi.to.response.UsuarioResponse;
 import br.ucsal.discordadapterapi.util.Constantes;
+import br.ucsal.discordadapterapi.util.DataUtil;
 import discord4j.core.object.entity.User;
 
 @Service
@@ -55,12 +57,13 @@ public class SubmissaoService {
 			sb.append("Nenhum submissão encontrada. Submeta uma resposta para uma tarefa.");
 		} else {
 			sb.append("*Submissões:*").append(Constantes.ESCAPE);
-			for (SubmissaoResponse sub : lista) { //TODO: ordenar lista do mais antigo para o mais novo
+			Collections.sort(lista, (sub1, sub2) -> sub2.getDataEnvio().compareTo(sub1.getDataEnvio()));
+			for (SubmissaoResponse sub : lista) {
 				sb.append("Tarefa: ").append(sub.getTarefa().getTitulo()).append(Constantes.ESCAPE);
 				sb.append("Instução: ").append(sub.getTarefa().getDescricao()).append(Constantes.ESCAPE);
 				sb.append("Percentual de acerto: ").append(String.format("%.2f", sub.getPorcentagemAcerto())).append("%").append(Constantes.ESCAPE);
 				sb.append("Resposta: ").append(Constantes.ESCAPE);
-				sb.append("Envio: ").append(sub.getDataEnvio()).append(Constantes.ESCAPE);
+				sb.append("Envio: ").append(DataUtil.formatarLocalDateTime(sub.getDataEnvio(), DataUtil.DATA_HORA_BR_FORMAT)).append(Constantes.ESCAPE);
 				sb.append("Código: ").append("`").append(sub.getCodigo()).append("`").append(Constantes.ESCAPE);
 				sb.append(Constantes.ESCAPE);
 				
