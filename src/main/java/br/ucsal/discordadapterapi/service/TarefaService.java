@@ -30,8 +30,20 @@ public class TarefaService {
 		
 		try {
 			List<TarefaResponse> tarefas = codeTestApiClient.obterTarefas(tokenService.obterToken());
+			return montarMenuTarefas(tarefas);
+		} catch (RuntimeException | BusinessException e) {
+			e.printStackTrace();
+			return Constantes.MSG_ERRO;
+		}
+		
+	}
+	
+	public String obterMenuTarefasComEmoji() {
+		
+		try {
+			List<TarefaResponse> tarefas = codeTestApiClient.obterTarefas(tokenService.obterToken());
 			mapearTarefas(tarefas);
-			return montarMenuTarefas();
+			return montarMenuTarefasComEmoji();
 		} catch (RuntimeException | BusinessException e) {
 			e.printStackTrace();
 			return Constantes.MSG_ERRO;
@@ -42,8 +54,18 @@ public class TarefaService {
 	public String obterMsgApresentacaoTarefaPorEmoji(EmojiEnum emojiEnum) {
 		try {
 			Long id = obterIdTarefaPorEmoji(emojiEnum);
+			return obterMsgApresentacaoTarefaPorId(id);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		
+	}
+	
+	public String obterMsgApresentacaoTarefaPorId(Long id) {
+		try {
 			TarefaResponse tarefa = codeTestApiClient.obterTarefaPeloId(id, tokenService.obterToken());
-			return montarApresentacaoTarefas(tarefa, emojiEnum);
+			return montarApresentacaoTarefas(tarefa, id);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			return e.getMessage();
@@ -75,7 +97,7 @@ public class TarefaService {
 		}
 	}
 	
-	private static String montarMenuTarefas() {
+	private static String montarMenuTarefasComEmoji() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("--------- ").append(Constantes.MENU_TAREFAS).append(" ---------").append(Constantes.ESCAPE);
 		
@@ -83,12 +105,25 @@ public class TarefaService {
 			sb.append(entry.getKey().obterCodigo()).append(" - ").append(entry.getValue().getTitulo()).append(Constantes.ESCAPE);
 		}
 		
-		sb.append("Reaja com o emoji correspondente para selecionar uma opção.").append(Constantes.ESCAPE);
+		sb.append("Digite o número correspondente para selecionar uma opção.").append(Constantes.ESCAPE);
 		sb.append("-------------------------------------").append(Constantes.ESCAPE);
 		return sb.toString();
 	}
 	
-	private static String montarApresentacaoTarefas(TarefaResponse tarefa, EmojiEnum emojiEnum) {
+	private static String montarMenuTarefas(List<TarefaResponse> tarefas) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("--------- ").append(Constantes.MENU_TAREFAS).append(" ---------").append(Constantes.ESCAPE);
+		
+		for(TarefaResponse tarefa : tarefas) {
+			sb.append("#").append(tarefa.getId()).append(" - ").append(tarefa.getTitulo()).append(Constantes.ESCAPE);
+		}
+		
+		sb.append("Digite o número correspondente para selecionar uma opção.").append(Constantes.ESCAPE);
+		sb.append("-------------------------------------").append(Constantes.ESCAPE);
+		return sb.toString();
+	}
+	
+	private static String montarApresentacaoTarefas(TarefaResponse tarefa, Long id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("**").append(tarefa.getTitulo()).append("**").append(Constantes.ESCAPE);
 		sb.append(tarefa.getDescricao()).append(Constantes.ESCAPE);
@@ -102,7 +137,7 @@ public class TarefaService {
 				}
 			}
 		}
-		sb.append(String.format("Resolva a " + Constantes.TAREFA + " %d na sua IDE favorita, copie a classe *Main* e cole no chat.", emojiEnum.getNumero())).append(Constantes.ESCAPE);
+		sb.append(String.format("Resolva a " + Constantes.TAREFA + " %d na sua IDE favorita, copie a classe *Main* e cole no chat.", id)).append(Constantes.ESCAPE);
 		sb.append("__Obs.: o nome da classe deve ser *Main*__");
 		return sb.toString();
 	}
