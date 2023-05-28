@@ -5,8 +5,11 @@ import org.springframework.stereotype.Component;
 
 import br.ucsal.discordadapterapi.event.EventListener;
 import br.ucsal.discordadapterapi.event.processor.ReactionProcessor;
+import br.ucsal.discordadapterapi.util.MessageUtil;
 import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.MessageChannel;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -22,11 +25,13 @@ public class ReactionAddEventListner implements EventListener<ReactionAddEvent>{
 
 	@Override
 	public Mono<Void> execute(ReactionAddEvent event) {
-		String resposta = reactionProcessor.obterResposta(event.getMessage().block(), event.getEmoji());
-		return Mono.just(event).flatMap(ReactionAddEvent::getMessage)
-				   			   .flatMap(Message::getChannel)
-				   			   .flatMap(channel -> resposta.isEmpty() ? Mono.empty() : channel.createMessage(resposta))
-				   			   .then();
+		Message msg = event.getMessage().block();
+		MessageChannel ch = msg.getChannel().block();
+		Message msgAnterior = MessageUtil.obterMsgAnterior(msg);
+		
+		return Flux.fromIterable(reactionProcessor.obterResposta(event.getMessage().block(), msgAnterior, event.getEmoji()))
+				   .flatMap(r ->  r.isEmpty() ? Mono.empty() : ch.createMessage(r)).then();
+		
 	}
 
 }

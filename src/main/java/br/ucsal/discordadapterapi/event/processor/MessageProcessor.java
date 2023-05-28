@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import br.ucsal.discordadapterapi.exception.BusinessException;
 import br.ucsal.discordadapterapi.filter.Filter;
 import br.ucsal.discordadapterapi.to.MessageTO;
-import br.ucsal.discordadapterapi.util.Constantes;
 import discord4j.core.object.entity.Message;
 
 @Component
@@ -19,17 +18,21 @@ public class MessageProcessor extends Processor<MessageTO> {
 		super(filters);
 	}
 
-	public String obterResposta(Message msg, Message msgAnterior) {
+	public List<String> obterResposta(Message msg, Message msgAnterior) {
+		
+		MessageTO to = new MessageTO(msg, msgAnterior);
 		try {
 
 			verificarMsgNulaOuVazia(msg);
 			verificarMsgBot(msg);
 
-			MessageTO to = new MessageTO(msg, msgAnterior);
 			return pipeline.process(to).getRetorno();
 
 		} catch (BusinessException e) {
-			return Constantes.EMPTY_STRING;
+			return to.getRetorno();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return List.of("Ocorreu um erro! Digite \"menu\" e tente novamente.");
 		}
 
 	}

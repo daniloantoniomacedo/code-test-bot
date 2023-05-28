@@ -1,5 +1,7 @@
 package br.ucsal.discordadapterapi.filter;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import br.ucsal.discordadapterapi.to.MessageTO;
@@ -16,7 +18,7 @@ public class SaudacaoFilter implements Filter<MessageTO> {
 		String conteudo = msg.getData().content();
 		if (conteudo.startsWith("oi")) {
 			msg.getAuthor().ifPresent(user -> autor = user.getUsername());
-			to.setRetorno(String.format("Olá, %s!", autor));
+			to.setRetorno(List.of(String.format("Olá, %s!", autor)));
 		}
 
 		return to;

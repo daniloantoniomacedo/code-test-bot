@@ -110,7 +110,7 @@ public class CodeTestApiClientService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TarefaResponse> obterTarefas(String token) throws BusinessException {
+	public Optional<List<TarefaResponse>> obterTarefas(String token) {
 
 		try {
 			HttpClient client = HttpClient.newHttpClient();
@@ -120,7 +120,7 @@ public class CodeTestApiClientService {
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 
 			if (Objects.nonNull(response) && response.statusCode() == HttpStatus.OK.value()) {
-				return JsonUtil.fromJson(response.body(), List.class, TarefaResponse.class);
+				return Optional.of(JsonUtil.fromJson(response.body(), List.class, TarefaResponse.class));
 			} else {
 				System.err.println(Constantes.MSG_ERRO_OBTER_TAREFAS + Constantes.HTTP_STATUS_CODE + response.statusCode());
 			}
@@ -130,7 +130,7 @@ public class CodeTestApiClientService {
 			e.printStackTrace();
 		}
 		
-		throw new BusinessException(Constantes.MSG_ERRO_OBTER_TAREFAS);
+		return Optional.empty();
 
 	}
 

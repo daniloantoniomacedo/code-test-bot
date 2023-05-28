@@ -1,9 +1,12 @@
 package br.ucsal.discordadapterapi.service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,26 +32,30 @@ public class TarefaService {
 	public String obterMenuTarefas() {
 		
 		try {
-			List<TarefaResponse> tarefas = codeTestApiClient.obterTarefas(tokenService.obterToken());
-			return montarMenuTarefas(tarefas);
+			Optional<List<TarefaResponse>> op = codeTestApiClient.obterTarefas(tokenService.obterToken());
+			if(op.isPresent()) {
+				List<TarefaResponse> tarefas = op.get();
+				return montarMenuTarefas(tarefas);
+			}
 		} catch (RuntimeException | BusinessException e) {
 			e.printStackTrace();
-			return Constantes.MSG_ERRO;
 		}
-		
+		return Constantes.MSG_ERRO;
 	}
 	
 	public String obterMenuTarefasComEmoji() {
 		
 		try {
-			List<TarefaResponse> tarefas = codeTestApiClient.obterTarefas(tokenService.obterToken());
-			mapearTarefas(tarefas);
-			return montarMenuTarefasComEmoji();
+			Optional<List<TarefaResponse>> op = codeTestApiClient.obterTarefas(tokenService.obterToken());
+			if(op.isPresent()) {
+				List<TarefaResponse> tarefas = op.get();
+				mapearTarefas(tarefas);
+				return montarMenuTarefasComEmoji();
+			}
 		} catch (RuntimeException | BusinessException e) {
 			e.printStackTrace();
-			return Constantes.MSG_ERRO;
 		}
-		
+		return Constantes.MSG_ERRO;
 	}
 	
 	public String obterMsgApresentacaoTarefaPorEmoji(EmojiEnum emojiEnum) {
@@ -65,12 +72,18 @@ public class TarefaService {
 	public String obterMsgApresentacaoTarefaPorId(Long id) {
 		try {
 			TarefaResponse tarefa = codeTestApiClient.obterTarefaPeloId(id, tokenService.obterToken());
-			return montarApresentacaoTarefas(tarefa, id);
+			return montarApresentacaoTarefa(tarefa, id);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			return e.getMessage();
 		}
 		
+	}
+	
+	public String obterMsgApresentacaoTarefaAleatoria(Long idTarefaCompleta) {
+		List<Long> idsDisponiveis = obterIdsTarefasDisponiveis(); 
+		Long idTarefaAleatoria = obterIdTarefaAleatoria(idTarefaCompleta, idsDisponiveis);
+		return obterMsgApresentacaoTarefaPorId(idTarefaAleatoria);
 	}
 	
 	private Long obterIdTarefaPorEmoji(EmojiEnum emojiEnum) throws BusinessException {
@@ -123,7 +136,7 @@ public class TarefaService {
 		return sb.toString();
 	}
 	
-	private static String montarApresentacaoTarefas(TarefaResponse tarefa, Long id) {
+	private static String montarApresentacaoTarefa(TarefaResponse tarefa, Long id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("**").append(tarefa.getTitulo()).append("**").append(Constantes.ESCAPE);
 		sb.append(tarefa.getDescricao()).append(Constantes.ESCAPE);
@@ -140,6 +153,42 @@ public class TarefaService {
 		sb.append(String.format("Resolva a " + Constantes.TAREFA + " %d na sua IDE favorita, copie a classe *Main* e cole no chat.", id)).append(Constantes.ESCAPE);
 		sb.append("__Obs.: o nome da classe deve ser *Main*__");
 		return sb.toString();
+	}
+	
+	
+	private List<Long> obterIdsTarefasDisponiveis() {
+		
+		List<Long> idsList = new ArrayList<>();
+		
+		try {
+			Optional<List<TarefaResponse>> op = codeTestApiClient.obterTarefas(tokenService.obterToken());
+			if(op.isPresent()) {
+				List<TarefaResponse> tarefas = op.get();
+				for(TarefaResponse tarefa : tarefas) {
+					idsList.add(tarefa.getId());
+				}
+			}
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+		
+		return idsList;
+	}
+	
+	private static Long obterIdTarefaAleatoria(Long excludedId, List<Long> idsAvailable) {
+		
+		if(idsAvailable.isEmpty()) {
+			return 0L;
+		}
+		
+        Random random = new Random();
+        int randomIndex;
+
+        do {
+            randomIndex = random.nextInt(idsAvailable.size());
+        } while (idsAvailable.get(randomIndex) == excludedId);
+
+        return idsAvailable.get(randomIndex);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package br.ucsal.discordadapterapi.filter;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,9 +36,9 @@ public class ProcessaRespostaTarefaFilter implements Filter<MessageTO> {
 		return to;
 	}
 
-	private String obterRetorno(MessageTO to, Optional<UsuarioResponse> retornoObterUsuario) {
+	private List<String> obterRetorno(MessageTO to, Optional<UsuarioResponse> retornoObterUsuario) {
 		Message msgAtual = to.getMsg();
-		String retorno = Constantes.EMPTY_STRING;
+		List<String> retorno = Collections.emptyList();
 		if(retornoObterUsuario.isPresent()) {
 			retorno = respostaService.corrigirResposta(msgAtual.getContent(), obterNumeroTarefa(to.getMsgAnterior()), retornoObterUsuario.get().getId());
 		} else {
@@ -49,7 +51,7 @@ public class ProcessaRespostaTarefaFilter implements Filter<MessageTO> {
 	}
 	
 	private static boolean ehRespostaTarefa(MessageTO to) {
-		return Objects.nonNull(to.getMsg()) && Objects.nonNull(to.getMsgAnterior()) && Objects.nonNull(to.getMsgAnterior().getContent())
+		return Objects.nonNull(to.getMsg()) && !to.getMsg().getContent().contains(Constantes.MENU) && Objects.nonNull(to.getMsgAnterior()) && Objects.nonNull(to.getMsgAnterior().getContent())
 				&& to.getMsgAnterior().getContent().length() > 0 && to.getMsgAnterior().getContent().contains(Constantes.TAREFA);
 	}
 

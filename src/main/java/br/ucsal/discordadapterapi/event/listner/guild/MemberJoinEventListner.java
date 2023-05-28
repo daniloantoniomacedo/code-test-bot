@@ -19,7 +19,7 @@ public class MemberJoinEventListner implements EventListener<MemberJoinEvent>{
 	public Mono<Void> execute(final MemberJoinEvent event) {
 		Member member = event.getMember();
 		return Mono.just(member.getPrivateChannel()
-			       .flatMap(channel -> channel.createMessage("Bem-vindo ao nosso canal privado!"))).then();
+			       .flatMap(channel -> channel.createMessage("Bem-vindo ao nosso canal privado! Digite menu para escolher uma opção."))).then();
 	}
 	 
 }

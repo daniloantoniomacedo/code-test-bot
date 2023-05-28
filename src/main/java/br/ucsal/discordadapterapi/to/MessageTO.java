@@ -1,6 +1,8 @@
 package br.ucsal.discordadapterapi.to;
 
-import br.ucsal.discordadapterapi.util.Constantes;
+import java.util.Collections;
+import java.util.List;
+
 import discord4j.core.object.entity.Message;
 import lombok.Data;
 
@@ -9,7 +11,7 @@ public class MessageTO {
 	
 	private Message msg;
 	private Message msgAnterior;
-	private String retorno = Constantes.EMPTY_STRING;
+	private List<String> retorno = Collections.emptyList();
 	
 	public MessageTO(Message msg) {
 		this.msg = msg;

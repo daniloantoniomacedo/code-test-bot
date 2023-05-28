@@ -25,6 +25,7 @@ public class Constantes {
 	public static final String EMAIL_PADRAO = "email";
 	public static final String SENHA_PADRAO = "senha";
 	public static final String HTTP_STATUS_CODE = " HTTP STATUS CODE ";
+	public static final String MENU = "menu";
 	
 	public static final Long PERFIL_ALUNO = 2L;
 

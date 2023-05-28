@@ -1,5 +1,6 @@
 package br.ucsal.discordadapterapi.event.processor;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component;
 import br.ucsal.discordadapterapi.exception.BusinessException;
 import br.ucsal.discordadapterapi.filter.Filter;
 import br.ucsal.discordadapterapi.to.ReactionTO;
-import br.ucsal.discordadapterapi.util.Constantes;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.reaction.ReactionEmoji;
 
@@ -20,17 +20,21 @@ public class ReactionProcessor extends Processor<ReactionTO>{
 		super(filters);
 	}
 
-	public String obterResposta(Message msg, ReactionEmoji emoji) {
+	public List<String> obterResposta(Message msg, Message msgAnterior, ReactionEmoji emoji) {
 		try {
 			
 			verificarMsgNulaOuVazia(msg);
 			verificarMsgNonBot(msg);
 			
-			ReactionTO to = new ReactionTO(msg, emoji);
+			ReactionTO to = new ReactionTO(msg, msgAnterior, emoji);
 			return pipeline.process(to).getRetorno();
 
 		} catch (BusinessException e) {
-			return Constantes.EMPTY_STRING;
+			e.printStackTrace();
+			return Collections.emptyList();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return List.of("Ocorreu um erro! Digite \"menu\" e tente novamente.");
 		}
 
 	}

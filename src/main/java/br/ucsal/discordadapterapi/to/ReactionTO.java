@@ -11,8 +11,8 @@ public class ReactionTO extends MessageTO {
 	
 	ReactionEmoji emoji;
 	
-	public ReactionTO(Message msg, ReactionEmoji emoji) {
-		super(msg);
+	public ReactionTO(Message msg, Message msgAnterior, ReactionEmoji emoji) {
+		super(msg, msgAnterior);
 		this.emoji = emoji;
 	}
 

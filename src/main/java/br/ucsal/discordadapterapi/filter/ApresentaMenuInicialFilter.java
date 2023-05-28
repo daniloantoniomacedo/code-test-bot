@@ -1,5 +1,7 @@
 package br.ucsal.discordadapterapi.filter;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import br.ucsal.discordadapterapi.enums.EmojiEnum;
@@ -19,10 +21,10 @@ public class ApresentaMenuInicialFilter implements Filter<MessageTO> {
 			sb.append("--------- ").append(Constantes.MENU_INICIAL).append(" ---------\n");
 			sb.append(EmojiEnum.OPCAO_1.obterCodigo()).append(" - Responder tarefas \n");
 			sb.append(EmojiEnum.OPCAO_2.obterCodigo()).append(" - Minhas submissões \n");
-			sb.append(EmojiEnum.OPCAO_3.obterCodigo()).append(" - Instruções \n");
+			//sb.append(EmojiEnum.OPCAO_3.obterCodigo()).append(" - Instruções \n");
 			sb.append("Reaja com o emoji correspondente para selecionar uma opção.\n");
 			sb.append("------------------------------------\n");
-			to.setRetorno(sb.toString());
+			to.setRetorno(List.of(sb.toString()));
 		}
 		return to;
 	}

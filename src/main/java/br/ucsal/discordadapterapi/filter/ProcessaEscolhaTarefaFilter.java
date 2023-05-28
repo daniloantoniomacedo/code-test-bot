@@ -1,5 +1,7 @@
 package br.ucsal.discordadapterapi.filter;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +23,11 @@ public class ProcessaEscolhaTarefaFilter implements Filter<MessageTO> {
 			try {
 				id = Long.valueOf(to.getMsg().getContent());
 			} catch (NumberFormatException e) {
-				to.setRetorno("Digite apenas o número da tarefa escolhida.");
+				to.setRetorno(List.of("Digite apenas o número da tarefa escolhida.", tarefaService.obterMenuTarefas()));
 				return to;
 			}
 			
-			to.setRetorno(tarefaService.obterMsgApresentacaoTarefaPorId(id));
+			to.setRetorno(List.of(tarefaService.obterMsgApresentacaoTarefaPorId(id)));
 		}
 		return to;
 	}
