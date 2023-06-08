@@ -1,6 +1,7 @@
 package br.ucsal.discordadapterapi.util;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import discord4j.common.util.Snowflake;
@@ -15,8 +16,11 @@ public class MessageUtil {
 		MessageChannel canal = msg.getChannel().block();
 		Flux<Message> messageHistory = canal.getMessagesBefore(Snowflake.of(msg.getId().asString()));
 		Optional<List<Message>> op = messageHistory.collectList().blockOptional();
-		if(op.isPresent()) {
-			msgAnterior = op.get().get(0);
+		if(Objects.nonNull(op) && op.isPresent()) {
+			List<Message> lista = op.get();
+			if(Objects.nonNull(lista) && !lista.isEmpty()) {
+				msgAnterior = lista.get(0);
+			}
 		}
 		return msgAnterior;
 	}

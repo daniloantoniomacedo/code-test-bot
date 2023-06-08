@@ -3,17 +3,19 @@ version: '3'
 services:
     postgres:
         image: postgres:latest
+        container_name: postgres
         env_file:
           - .env
         volumes:
-          - C:\Users\Danilo.DESKTOP-HBLJ4GK\Documents\Postgres:/var/lib/postgresql/data
+          - ~/desenv/postgres-data:/postgres-data
         ports:
-          - "15432:5432"
+          - "5432:5432"
         networks:
           - rede-code-test
     
     discord-adapter-api:
         image: dbmacedo/code-test-discord:discord-adapter-api
+        container_name: discord-adapter-api
         env_file:
           - .env
         ports:
@@ -23,6 +25,7 @@ services:
     
     code-test-api:
         image: dbmacedo/code-test-discord:code-test-api
+        container_name: code-test-api
         env_file:
           - .env
         ports:

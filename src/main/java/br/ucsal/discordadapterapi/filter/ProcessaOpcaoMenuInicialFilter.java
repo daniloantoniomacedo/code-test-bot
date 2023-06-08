@@ -37,7 +37,7 @@ public class ProcessaOpcaoMenuInicialFilter implements Filter<ReactionTO> {
 			} else if(EmojiEnum.OPCAO_2.equals(emojiEnum)) {
 				Optional<User> op = to.getMsgAnterior().getAuthor();
 				if(op.isPresent()) {
-					to.setRetorno(List.of(submissaoService.obterSubmissoes(op.get())));
+					to.setRetorno(submissaoService.obterSubmissoes(op.get()));
 				}
 			} else if(EmojiEnum.OPCAO_3.equals(emojiEnum)) {
 				to.setRetorno(List.of(apresentarInstrucoes()));

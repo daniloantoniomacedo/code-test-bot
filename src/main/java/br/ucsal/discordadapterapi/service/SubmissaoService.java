@@ -1,5 +1,6 @@
 package br.ucsal.discordadapterapi.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,38 +28,38 @@ public class SubmissaoService {
 	@Autowired
 	private TokenService tokenService;
 
-	public String obterSubmissoes(User user) {
-		String retorno = Constantes.MSG_ERRO;
+	public List<String> obterSubmissoes(User user) {
+		List<String> listaSubmissoes = new ArrayList<>();
 		Optional<UsuarioResponse> op = usuarioService.obterDadosUsuario(user);
 		if (op.isPresent()) {
-			retorno = obterRetornoSubmissoes(retorno, op.get().getId());
+			listaSubmissoes = obterRetornoSubmissoes(listaSubmissoes, op.get().getId());
 		}
-		return retorno;
+		return listaSubmissoes;
 	}
 
-	private String obterRetornoSubmissoes(String retorno, Long idUsuario) {
+	private List<String> obterRetornoSubmissoes(List<String> listaSubmissoes, Long idUsuario) {
 		try {
 			Optional<List<SubmissaoResponse>> op = codeTestApiClient.obterSubmissoes(idUsuario,
 					tokenService.obterToken());
 			if (op.isPresent()) {
-				retorno = montarRetornoSubmissoes(op.get());
+				listaSubmissoes = montarRetornoSubmissoes(listaSubmissoes, op.get());
 			}
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
 
-		return retorno;
+		return listaSubmissoes;
 	}
 
-	private static String montarRetornoSubmissoes(List<SubmissaoResponse> lista) {
-		StringBuilder sb = new StringBuilder();
-
+	private static List<String> montarRetornoSubmissoes(List<String> listaSubmissoes, List<SubmissaoResponse> lista) {
+		
 		if (lista.isEmpty()) {
-			sb.append("Nenhum submissão encontrada. Submeta uma resposta para uma tarefa.");
+			listaSubmissoes.add("Nenhum submissão encontrada. Submeta uma resposta para uma tarefa.");
 		} else {
-			sb.append("*Submissões:*").append(Constantes.ESCAPE);
+			listaSubmissoes.add("*Submissões:*");
 			Collections.sort(lista, (sub1, sub2) -> sub2.getDataEnvio().compareTo(sub1.getDataEnvio()));
 			for (SubmissaoResponse sub : lista) {
+				StringBuilder sb = new StringBuilder();
 				sb.append("Tarefa: ").append(sub.getTarefa().getTitulo()).append(Constantes.ESCAPE);
 				sb.append("Instução: ").append(sub.getTarefa().getDescricao()).append(Constantes.ESCAPE);
 				sb.append("Percentual de acerto: ").append(String.format("%.2f", sub.getPorcentagemAcerto())).append("%").append(Constantes.ESCAPE);
@@ -68,14 +69,17 @@ public class SubmissaoService {
 				sb.append(Constantes.ESCAPE);
 				
 				if(sb.length() >= 1500) {
-					sb.append("Obs.: Algumas submissões mais antigas foram suprimidas devido a limitação de caracteres do Discord.");
+					sb.append("Obs.: Parte do código dessa submissão foi suprimido devido a limitação de caracteres do Discord.");
+					listaSubmissoes.add(sb.toString());
 					break;
 				}
+				
+				listaSubmissoes.add(sb.toString());
 			}
 
 		}
 
-		return sb.toString();
+		return listaSubmissoes;
 	}
 
 }
