@@ -1,8 +1,8 @@
 INSERT INTO usuario(data_criacao, data_ultimo_acesso, flag_ativo, login, email, nome, senha)
 values ('2021-12-20 18:47:52', '2021-12-21 18:47:52', true, 'ester','ester@ucsal.edu.br', 'Ester', '$2a$10$Le.iEd4ISlBGn65MJuSeMuLfwlcES6zMfHKBnm07xWKfTAv1S/sw6'),
        ('2021-12-20 18:47:52', '2021-12-21 18:47:52', true, 'yla','yla@ucsal.edu.br', 'Yla Buri', '$2a$10$76rLhrHoVlJNxT9lvmV3LuqBwVYrAtJ3akT1ahV3viS7cSo42Tpq.'),
-       ('2021-12-20 18:47:52', '2021-12-21 18:47:52', true, 'joaldo','joaldo@ucsal.edu.br', 'Joaldo Tavares', '$2a$10$76rLhrHoVlJNxT9lvmV3LuqBwVYrAtJ3akT1ahV3viS7cSo42Tpq.');
-      -- ('2023-04-06 18:23:17', '2023-04-06 18:23:17', true, 'danilo','danilo@email.com', 'Danilo', '$2a$10$RJDFjMmilJEuV1.8jCyR0OZamgC3C4hRnHHG397p.p.PwnNblYZFG');
+       ('2021-12-20 18:47:52', '2021-12-21 18:47:52', true, 'joaldo','joaldo@ucsal.edu.br', 'Joaldo Tavares', '$2a$10$76rLhrHoVlJNxT9lvmV3LuqBwVYrAtJ3akT1ahV3viS7cSo42Tpq.'),
+       ('2023-04-06 18:23:17', '2023-04-06 18:23:17', true, 'danilo','danilo@email.com', 'Danilo', '$2a$10$RJDFjMmilJEuV1.8jCyR0OZamgC3C4hRnHHG397p.p.PwnNblYZFG');
 
 SELECT * FROM USUARIO;
 
@@ -10,6 +10,8 @@ INSERT INTO perfil(nome)
 values('Admin'),
 ('Aluno'),
 ('Professor');
+
+SELECT * FROM TAREFA;
 
 INSERT INTO tarefa(descricao, status, visibilidade, titulo, usuario_id)
 values
@@ -33,10 +35,7 @@ values
 SELECT * FROM USUARIO_PERFIL;
 
 INSERT INTO USUARIO_PERFIL(USUARIO_ID, PERFIL_ID)
-values (1, 2);
-
-INSERT INTO USUARIO_PERFIL(USUARIO_ID, PERFIL_ID)
-values (1, 1),(2, 2),(3, 3);
+values (1, 1),(2, 2),(3, 3), (4, 2);
 
 INSERT INTO PROVA(DATA_INICIAL, DATA_FINAL, NOME, USUARIO_ID)
 values ('2022-11-14 07:00:00', '2022-11-29 23:59:59', 'Prova final', 3),
